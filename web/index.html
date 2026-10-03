@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Baffo</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#070F26">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Baffo">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -12,19 +17,121 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #FFF8EC;
-      color: #0B1F4B;
+      background: radial-gradient(circle at 50% 40%, #142654 0%, #070F26 70%);
+      color: #E8E4D8;
       font-family: system-ui, sans-serif;
       text-align: center;
+      overflow: hidden;
     }
-    .label { color: #C8102E; font-weight: bold; letter-spacing: 3px; }
-    h1 { font-size: 2.5rem; margin: 10px 20px; }
-    .status { background: #0B1F4B; color: #FFC93C; padding: 12px 24px; border-radius: 999px; font-size: 1.2rem; }
+    .ring {
+      position: absolute;
+      width: min(80vw, 520px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(233, 196, 106, 0.25);
+      border-radius: 50%;
+      animation: breathe 6s ease-in-out infinite;
+      transition: box-shadow 1s, border-color 1s;
+    }
+    .ring.awake {
+      border-color: rgba(233, 196, 106, 0.9);
+      box-shadow: 0 0 60px rgba(233, 196, 106, 0.5), inset 0 0 60px rgba(233, 196, 106, 0.25);
+    }
+    h1 {
+      position: relative;
+      font-family: "Cinzel", serif;
+      font-size: clamp(1.8rem, 6vw, 3.6rem);
+      line-height: 1.2;
+      margin: 0 24px 24px;
+      background: linear-gradient(180deg, #F6DE96, #B8892E);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .status {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 16px;
+      font-size: 1.1rem;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #E9C46A;
+      box-shadow: 0 0 10px #E9C46A;
+      animation: breathe 3s ease-in-out infinite;
+    }
+    .tagline {
+      position: relative;
+      margin: 20px 24px 0;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: rgba(232, 228, 216, 0.55);
+    }
+    footer {
+      position: fixed;
+      bottom: 20px;
+      font-size: 0.8rem;
+      color: rgba(232, 228, 216, 0.4);
+    }
+    .rune { color: rgba(233, 196, 106, 0.6); cursor: help; }
+    @keyframes breathe { 50% { opacity: 0.35; } }
+    @media (prefers-reduced-motion: reduce) { .ring, .dot { animation: none; } }
   </style>
 </head>
 <body>
-  <p class="label"> NOW SHOWING</p>
+  <div class="ring" id="ring"></div>
+
   <h1>What is the Baffo Boss up to?</h1>
-  <p class="status"> Studeren & Nobelprijs halen</p>
+
+  <p class="status">
+    <span class="dot" title="Live. Are you watching closely?"></span>
+    <span id="status">Learning and earning</span>
+  </p>
+
+  <p class="tagline" id="tagline"></p>
+
+  <footer>
+    <span class="rune" title="Berkanan: the ancient rune for B">ᛒ</span>
+    &nbsp;Who reads a footer anyway?
+  </footer>
+
+  <script>
+    // 1. A different film-inspired tagline on every visit
+    const taglines = [
+      "Forging pricing models in the fires of econometrics.",
+      "One hour of deep work is worth seven years.",
+      "Running the numbers at 88 miles per hour.",
+      "The price must flow.",
+      "Sailing toward the horizon. Savvy?",
+      "Seize the day. Then optimize it.",
+      "The best stories start with a few good friends."
+    ];
+    const pick = taglines[Math.floor(Math.random() * taglines.length)];
+    document.getElementById("tagline").textContent = pick;
+
+    // 2. The tab title calls you back when you leave
+    document.addEventListener("visibilitychange", () => {
+      document.title = document.hidden ? "Come back to the Shire…" : "Baffo";
+    });
+
+    // 3. Secret messages for developers who open the console
+    console.log("%cOne engine to price them all.", "color:#E9C46A; font-size:16px; font-family:serif;");
+    console.log("Curious? Try the code every 80s kid knows: ↑ ↑ ↓ ↓ ← → ← → B A");
+
+    // 4. The Konami code wakes up the ring
+    const secret = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+    let progress = 0;
+    document.addEventListener("keydown", (event) => {
+      progress = (event.key === secret[progress]) ? progress + 1 : 0;
+      if (progress === secret.length) {
+        document.getElementById("ring").classList.add("awake");
+        document.getElementById("status").textContent = "You shall pass.";
+        progress = 0;
+      }
+    });
+  </script>
 </body>
 </html>
