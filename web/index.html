@@ -1,137 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Baffo</title>
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#070F26">
-  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="Baffo">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at 50% 40%, #142654 0%, #070F26 70%);
-      color: #E8E4D8;
-      font-family: system-ui, sans-serif;
-      text-align: center;
-      overflow: hidden;
-    }
-    .ring {
-      position: absolute;
-      width: min(80vw, 520px);
-      aspect-ratio: 1;
-      border: 1px solid rgba(233, 196, 106, 0.25);
-      border-radius: 50%;
-      animation: breathe 6s ease-in-out infinite;
-      transition: box-shadow 1s, border-color 1s;
-    }
-    .ring.awake {
-      border-color: rgba(233, 196, 106, 0.9);
-      box-shadow: 0 0 60px rgba(233, 196, 106, 0.5), inset 0 0 60px rgba(233, 196, 106, 0.25);
-    }
-    h1 {
-      position: relative;
-      font-family: "Cinzel", serif;
-      font-size: clamp(1.8rem, 6vw, 3.6rem);
-      line-height: 1.2;
-      margin: 0 24px 24px;
-      background: linear-gradient(180deg, #F6DE96, #B8892E);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .status {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0 16px;
-      font-size: 1.1rem;
-    }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #E9C46A;
-      box-shadow: 0 0 10px #E9C46A;
-      animation: breathe 3s ease-in-out infinite;
-    }
-    .tagline {
-      position: relative;
-      margin: 20px 24px 0;
-      font-size: 0.9rem;
-      font-style: italic;
-      color: rgba(232, 228, 216, 0.55);
-    }
-    footer {
-      position: fixed;
-      bottom: 20px;
-      font-size: 0.8rem;
-      color: rgba(232, 228, 216, 0.4);
-    }
-    .rune { color: rgba(233, 196, 106, 0.6); cursor: help; }
-    @keyframes breathe { 50% { opacity: 0.35; } }
-    @media (prefers-reduced-motion: reduce) { .ring, .dot { animation: none; } }
-  </style>
-</head>
-<body>
-  <div class="ring" id="ring"></div>
-
-  <h1>What is the Baffo Boss up to?</h1>
-
-  <p class="status">
-    <span class="dot" title="Live. Are you watching closely?"></span>
-    <span id="status">Learning and earning</span>
-  </p>
-
-  <p class="tagline" id="tagline"></p>
-
-  <footer>
-    <span class="rune" title="Berkanan: the ancient rune for B">ᛒ</span>
-    &nbsp;Who reads a footer anyway?
-  </footer>
-
-  <script>
-    // 1. A different film-inspired tagline on every visit
-    const taglines = [
-      "Forging pricing models in the fires of econometrics.",
-      "One hour of deep work is worth seven years.",
-      "Running the numbers at 88 miles per hour.",
-      "The price must flow.",
-      "Sailing toward the horizon. Savvy?",
-      "Seize the day. Then optimize it.",
-      "The best stories start with a few good friends."
-    ];
-    const pick = taglines[Math.floor(Math.random() * taglines.length)];
-    document.getElementById("tagline").textContent = pick;
-
-    // 2. The tab title calls you back when you leave
-    document.addEventListener("visibilitychange", () => {
-      document.title = document.hidden ? "Come back to the Shire…" : "Baffo";
-    });
-
-    // 3. Secret messages for developers who open the console
-    console.log("%cOne engine to price them all.", "color:#E9C46A; font-size:16px; font-family:serif;");
-    console.log("Curious? Try the code every 80s kid knows: ↑ ↑ ↓ ↓ ← → ← → B A");
-
-    // 4. The Konami code wakes up the ring
-    const secret = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
-    let progress = 0;
-    document.addEventListener("keydown", (event) => {
-      progress = (event.key === secret[progress]) ? progress + 1 : 0;
-      if (progress === secret.length) {
-        document.getElementById("ring").classList.add("awake");
-        document.getElementById("status").textContent = "You shall pass.";
-        progress = 0;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="What is the Baffo Boss up to?" />
+    <meta name="theme-color" content="#070F26" />
+    <title>Baffo</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Baffo" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-night: #070F26;
+        --color-midnight: #142654;
+        --color-gold: #E9C46A;
+        --color-gold-light: #F6DE96;
+        --color-gold-deep: #B8892E;
+        --color-parchment: #E8E4D8;
       }
-    });
-  </script>
-</body>
+
+      @keyframes breathe {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+
+      @keyframes fade-rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @layer base {
+        html {
+          color-scheme: dark;
+        }
+
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          background: radial-gradient(circle at 50% 40%, #142654 0%, #070F26 70%);
+        }
+
+        .ring {
+          width: min(88vw, 600px);
+          aspect-ratio: 1;
+          border: 1px solid rgba(233, 196, 106, 0.4);
+          border-radius: 9999px;
+          animation: breathe 6s ease-in-out infinite;
+          transition: border-color 1s, box-shadow 1s;
+        }
+
+        .ring-awake {
+          border-color: rgba(233, 196, 106, 0.9);
+          box-shadow: 0 0 60px rgba(233, 196, 106, 0.45), inset 0 0 60px rgba(233, 196, 106, 0.2);
+          animation: none;
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 9999px;
+          background: #E9C46A;
+          box-shadow: 0 0 12px rgba(233, 196, 106, 0.7);
+          animation: breathe 3s ease-in-out infinite;
+        }
+
+        .tagline {
+          min-height: 1.2em;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="m-0 overflow-hidden bg-night text-parchment antialiased">
+    <main class="relative flex min-h-[100dvh] items-center justify-center text-center">
+      <div class="ring pointer-events-none absolute inset-0 z-0 m-auto" id="ring" aria-hidden="true"></div>
+
+      <div class="relative z-10 px-6">
+        <h1 class="mx-auto max-w-[11ch] animate-[fade-rise_800ms_ease-out] bg-gradient-to-b from-gold-light to-gold-deep bg-clip-text font-[Cinzel] text-[clamp(2rem,6vw,3.75rem)] leading-[1.15] tracking-[-0.03em] text-transparent">
+          What is the Baffo Boss up to?
+        </h1>
+
+        <p class="mt-8 flex items-center justify-center gap-3 animate-[fade-rise_800ms_ease-out] text-lg text-parchment" style="animation-delay: 150ms;">
+          <span class="dot" title="Live. Are you watching closely?" aria-label="Live status"></span>
+          <span id="status">Learning and earning</span>
+        </p>
+
+        <p id="tagline" class="tagline mt-4 animate-[fade-rise_800ms_ease-out] text-[0.9rem] italic text-parchment/60" style="animation-delay: 300ms;"></p>
+      </div>
+    </main>
+
+    <footer class="fixed bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 text-[0.8rem] text-parchment/60">
+      <span class="text-gold/70" title="Berkanan: the ancient rune for B" aria-label="B rune">ᛒ</span>
+      <span>Directed by Baffo · Starring Vinny</span>
+    </footer>
+
+    <script src="assets/js/main.js" defer></script>
+  </body>
 </html>
